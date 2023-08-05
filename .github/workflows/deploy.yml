@@ -1,0 +1,29 @@
+name: Deploy ML Model with Dash
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Build Docker image
+        run: docker build -t my_ml_app .
+
+      - name: Run Docker container
+        run: docker run -d -p 8050:8050 my_ml_app
